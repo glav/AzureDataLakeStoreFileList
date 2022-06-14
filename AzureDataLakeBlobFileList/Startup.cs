@@ -9,14 +9,19 @@ namespace AzureDataLakeBlobFileList
 {
     internal class Startup
     {
-        public void Configure()
+        public static ConfigItems Configure()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile($"appsettings.json");
+                .AddJsonFile($"appsettings.json", true);
+            if (Environment.GetEnvironmentVariable("DEVELOPMENT") == "true")
+            {
+                configuration.AddJsonFile("appsettings-local.json", true);
+            }
 
             var config = configuration.Build();
-            var connectionString = config["ConnectionString"];
+            var items = config.GetChildren();
+            return new ConfigItems(config["BlobConnectionString"], config.GetSection("DirectoriesToEnumerate").GetChildren().Select(x => x.Value).ToArray());
         }
     }
 }
