@@ -21,7 +21,7 @@ namespace AzureDataLakeBlobFileList
 
             var config = configuration.Build();
             var items = config.GetChildren();
-            return new ConfigItems(config["BlobConnectionString"], config.GetSection("DirectoriesToEnumerate").GetChildren().Select(x => x.Value).ToArray());
+            return new ConfigItems(config["BlobConnectionString"],config["ContainerName"], config.GetSection("DirectoriesToEnumerate").GetChildren().Select(x => x.Value).ToArray());
         }
     }
 }

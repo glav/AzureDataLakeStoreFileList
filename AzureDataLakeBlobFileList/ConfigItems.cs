@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace AzureDataLakeBlobFileList
 {
-    internal record ConfigItems(string BlobConnectionString, string[] directoriesToEnumerate);
+    internal record ConfigItems(string BlobConnectionString, string ContainerName, string[] directoriesToEnumerate);
 }
