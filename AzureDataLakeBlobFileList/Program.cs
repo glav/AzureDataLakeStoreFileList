@@ -19,8 +19,6 @@ Console.WriteLine();
 
 foreach (var dirName in configItems.directoriesToEnumerate)
 {
-    var exportFilename = $"Bloblist-{dirName}.csv";
-
     Console.WriteLine($"...Accessing '{dirName}'");
     var dirClient = client.GetDirectoryClient(dirName);
     var pathsInDir = dirClient.GetPaths();
@@ -40,8 +38,9 @@ foreach (var dirName in configItems.directoriesToEnumerate)
     {
         if (item != null)
         {
-            var props = new NmiFileNameParser(item, dirName);
-            buffer.AppendFormat(props.ParsedProps.ToString());
+            var parser = new NmiFileNameParser(item, dirName);
+            var props = parser.ExtractProps(item);
+            buffer.AppendFormat(props.ToString());
         }
 
         cnt++;
@@ -56,6 +55,7 @@ foreach (var dirName in configItems.directoriesToEnumerate)
         item = pathsEnumerator.Current;
     }
 
+    var exportFilename = $"Bloblist-{dirName}.csv";
     Console.WriteLine($"\n...Writing data to {exportFilename}");
     File.WriteAllText($"./{exportFilename}", buffer.ToString());
 
